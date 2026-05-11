@@ -19,59 +19,54 @@ const fields = [
 ];
 
 function getValue(id) {
-  return document.getElementById(id).value.trim();
+  const element = document.getElementById(id);
+  return element ? element.value.trim() : "";
 }
 
 function saveDraft() {
-
   const data = {};
 
-  fields.forEach(field => {
+  fields.forEach((field) => {
     data[field] = getValue(field);
   });
 
-  localStorage.setItem(
-    "capSitrepDraft",
-    JSON.stringify(data)
-  );
-
+  localStorage.setItem("capSitrepDraft", JSON.stringify(data));
   alert("Draft saved.");
 }
 
 function loadDraft() {
-
   const saved = localStorage.getItem("capSitrepDraft");
 
   if (!saved) return;
 
-  const data = JSON.parse(saved);
+  try {
+    const data = JSON.parse(saved);
 
-  fields.forEach(field => {
+    fields.forEach((field) => {
+      const element = document.getElementById(field);
 
-    if (data[field]) {
-      document.getElementById(field).value = data[field];
-    }
-
-  });
+      if (element && data[field]) {
+        element.value = data[field];
+      }
+    });
+  } catch (error) {
+    console.error("Draft load error:", error);
+  }
 }
 
 function clearForm() {
-
   if (!confirm("Clear all fields?")) return;
 
-  fields.forEach(field => {
-    document.getElementById(field).value = "";
+  fields.forEach((field) => {
+    const element = document.getElementById(field);
+    if (element) element.value = "";
   });
 
   localStorage.removeItem("capSitrepDraft");
 }
 
 async function exportSitrep() {
-
   try {
-
-    // Verify libraries loaded
-
     if (typeof PizZip === "undefined") {
       throw new Error("PizZip library failed to load.");
     }
@@ -84,33 +79,26 @@ async function exportSitrep() {
       throw new Error("FileSaver library failed to load.");
     }
 
-    // Load template
+    const response = await fetch("/SITREP.docx");
 
-    const response = await fetch("./SITREP.docx");
+    console.log("Template response:", response.status, response.url);
 
     if (!response.ok) {
       throw new Error(
-        `Unable to load SITREP.docx (HTTP ${response.status})`
+        `Unable to load SITREP.docx. Status: ${response.status}. Make sure SITREP.docx is deployed in the same public/root folder as index.html.`
       );
     }
 
     const arrayBuffer = await response.arrayBuffer();
 
-    // Open DOCX zip
-
     const zip = new PizZip(arrayBuffer);
-
-    // Create template document
 
     const doc = new window.docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
     });
 
-    // Replace placeholders
-
     doc.render({
-
       incidentName: getValue("incidentName"),
       missionNumber: getValue("missionNumber"),
 
@@ -121,30 +109,20 @@ async function exportSitrep() {
       timeTo: getValue("timeTo"),
 
       currentSituation: getValue("currentSituation"),
-
       criticalIssues: getValue("criticalIssues"),
-
       equipmentStatus: getValue("equipmentStatus"),
-
       teamStatus: getValue("teamStatus"),
 
       assetsAvailable: getValue("assetsAvailable"),
-
       plannedActivities: getValue("plannedActivities"),
-
       additionalInfo: getValue("additionalInfo"),
 
       preparedBy: getValue("preparedBy"),
-
       distribution: getValue("distribution"),
 
       reportDate: getValue("reportDate"),
-
       reportTime: getValue("reportTime")
-
     });
-
-    // Generate output file
 
     const blob = doc.getZip().generate({
       type: "blob",
@@ -152,34 +130,22 @@ async function exportSitrep() {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
 
-    // Download file
-
     saveAs(blob, "CAP-SITREP.docx");
-
   } catch (error) {
-
     console.error("SITREP Export Error:", error);
 
-    alert(
-      "Export failed:\n\n" + error.message
-    );
+    alert("Export failed:\n\n" + error.message);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
   loadDraft();
 
-  document
-    .getElementById("saveBtn")
-    .addEventListener("click", saveDraft);
+  const saveBtn = document.getElementById("saveBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const exportBtn = document.getElementById("exportBtn");
 
-  document
-    .getElementById("clearBtn")
-    .addEventListener("click", clearForm);
-
-  document
-    .getElementById("exportBtn")
-    .addEventListener("click", exportSitrep);
-
+  if (saveBtn) saveBtn.addEventListener("click", saveDraft);
+  if (clearBtn) clearBtn.addEventListener("click", clearForm);
+  if (exportBtn) exportBtn.addEventListener("click", exportSitrep);
 });
