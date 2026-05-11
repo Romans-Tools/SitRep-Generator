@@ -3,149 +3,68 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CAP Situation Report Generator</title>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 
-  <!-- PizZip -->
   <script src="https://unpkg.com/pizzip@3.1.5/dist/pizzip.js"></script>
-
-  <!-- Docxtemplater -->
   <script src="https://unpkg.com/docxtemplater@3.37.11/build/docxtemplater.js"></script>
-
-  <!-- FileSaver -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
 <body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
 
-  <div class="container">
-
-    <header>
-      <h1>CAP Situation Report Generator</h1>
-      <p>Create and export Civil Air Patrol Situation Reports.</p>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">CAP Operations Toolkit</p>
+      <h1>Situation Report Generator</h1>
+      <p class="subtitle">Capture incident details, save drafts, and export professional SITREP documents in one streamlined workflow.</p>
     </header>
 
-    <div class="card">
-
-      <div class="grid">
-
-        <div class="form-group">
-          <label for="incidentName">Incident Name</label>
-          <input type="text" id="incidentName">
-        </div>
-
-        <div class="form-group">
-          <label for="missionNumber">Mission Number</label>
-          <input type="text" id="missionNumber">
-        </div>
-
-        <div class="form-group">
-          <label for="dateFrom">Date From</label>
-          <input type="date" id="dateFrom">
-        </div>
-
-        <div class="form-group">
-          <label for="dateTo">Date To</label>
-          <input type="date" id="dateTo">
-        </div>
-
-        <div class="form-group">
-          <label for="timeFrom">Time From</label>
-          <input type="time" id="timeFrom">
-        </div>
-
-        <div class="form-group">
-          <label for="timeTo">Time To</label>
-          <input type="time" id="timeTo">
-        </div>
-
-      </div>
-
-      <div class="form-group">
-        <label for="currentSituation">Current Situation</label>
-        <textarea id="currentSituation"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="criticalIssues">Critical Issues</label>
-        <textarea id="criticalIssues"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="equipmentStatus">Equipment Status</label>
-        <textarea id="equipmentStatus"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="teamStatus">Team Status</label>
-        <textarea id="teamStatus"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="assetsAvailable">Assets Available</label>
-        <textarea id="assetsAvailable"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="plannedActivities">
-          Planned Activities (Projected Next 24–72 Hours)
-        </label>
-        <textarea id="plannedActivities"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="additionalInfo">Additional Information</label>
-        <textarea id="additionalInfo"></textarea>
+    <section class="card">
+      <div class="section-head">
+        <h2>Report Details</h2>
+        <p>All values map directly into <strong>SITREP.docx</strong>.</p>
       </div>
 
       <div class="grid">
+        <div class="form-group"><label for="incidentName">Incident Name</label><input type="text" id="incidentName" placeholder="e.g., Flood Response Alpha"></div>
+        <div class="form-group"><label for="missionNumber">Mission Number</label><input type="text" id="missionNumber" placeholder="e.g., 26-1234"></div>
+        <div class="form-group"><label for="dateFrom">Date From</label><input type="date" id="dateFrom"></div>
+        <div class="form-group"><label for="dateTo">Date To</label><input type="date" id="dateTo"></div>
+        <div class="form-group"><label for="timeFrom">Time From</label><input type="time" id="timeFrom"></div>
+        <div class="form-group"><label for="timeTo">Time To</label><input type="time" id="timeTo"></div>
+      </div>
 
-        <div class="form-group">
-          <label for="preparedBy">Prepared By</label>
-          <input type="text" id="preparedBy">
-        </div>
+      <div class="form-group"><label for="currentSituation">Current Situation</label><textarea id="currentSituation"></textarea></div>
+      <div class="form-group"><label for="criticalIssues">Critical Issues</label><textarea id="criticalIssues"></textarea></div>
+      <div class="form-group"><label for="equipmentStatus">Equipment Status</label><textarea id="equipmentStatus"></textarea></div>
+      <div class="form-group"><label for="teamStatus">Team Status</label><textarea id="teamStatus"></textarea></div>
+      <div class="form-group"><label for="assetsAvailable">Assets Available</label><textarea id="assetsAvailable"></textarea></div>
+      <div class="form-group"><label for="plannedActivities">Planned Activities (Projected Next 24–72 Hours)</label><textarea id="plannedActivities"></textarea></div>
+      <div class="form-group"><label for="additionalInfo">Additional Information</label><textarea id="additionalInfo"></textarea></div>
 
-        <div class="form-group">
-          <label for="distribution">Distribution</label>
-          <input type="text" id="distribution">
-        </div>
-
-        <div class="form-group">
-          <label for="reportDate">Report Date</label>
-          <input type="date" id="reportDate">
-        </div>
-
-        <div class="form-group">
-          <label for="reportTime">Report Time</label>
-          <input type="time" id="reportTime">
-        </div>
-
+      <div class="grid">
+        <div class="form-group"><label for="preparedBy">Prepared By</label><input type="text" id="preparedBy"></div>
+        <div class="form-group"><label for="distribution">Distribution</label><input type="text" id="distribution"></div>
+        <div class="form-group"><label for="reportDate">Report Date</label><input type="date" id="reportDate"></div>
+        <div class="form-group"><label for="reportTime">Report Time</label><input type="time" id="reportTime"></div>
       </div>
 
       <div class="button-row">
-
-        <button id="exportBtn" class="primary">
-          Export SITREP
-        </button>
-
-        <button id="saveBtn" class="secondary">
-          Save Draft
-        </button>
-
-        <button id="clearBtn" class="danger">
-          Clear Form
-        </button>
-
+        <button id="exportBtn" class="primary">Export SITREP</button>
+        <button id="saveBtn" class="secondary">Save Draft</button>
+        <button id="clearBtn" class="danger">Clear Form</button>
       </div>
-
-    </div>
-
-  </div>
+    </section>
+  </main>
 
   <script src="script.js"></script>
-
 </body>
 
 </html>
