@@ -1,1 +1,304 @@
+/* style.css - CAP Situation Report Generator */
 
+:root {
+  --cap-blue: #0032a0;
+  --cap-red: #b31b1b;
+  --cap-gray: #e6e6e6;
+  --border: #222;
+  --text: #111;
+  --background: #f5f6f8;
+  --white: #fff;
+  --font-main: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  color: var(--text);
+  background: var(--background);
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--cap-blue);
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #555;
+}
+
+.generator-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.form-panel,
+.preview-panel {
+  background: var(--white);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.form-section {
+  margin-bottom: 22px;
+}
+
+.form-section h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--cap-blue);
+  border-bottom: 2px solid var(--cap-blue);
+  padding-bottom: 6px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 9px 10px;
+  font: inherit;
+  background: #fff;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid rgba(0, 50, 160, 0.25);
+  border-color: var(--cap-blue);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+button {
+  border: none;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font: inherit;
+}
+
+button.primary {
+  background: var(--cap-blue);
+  color: #fff;
+}
+
+button.secondary {
+  background: #ddd;
+  color: #111;
+}
+
+button.danger {
+  background: var(--cap-red);
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* SITREP Preview */
+
+.sitrep-page {
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto 24px;
+  padding: 0.45in 0.45in 0.35in;
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.sitrep-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.sitrep-logo {
+  width: 66px;
+  height: 66px;
+  object-fit: contain;
+}
+
+.sitrep-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.sitrep-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.sitrep-table th,
+.sitrep-table td {
+  border: 1px solid var(--border);
+  padding: 4px 6px;
+  vertical-align: top;
+}
+
+.sitrep-table th {
+  background: var(--cap-gray);
+  text-align: left;
+  font-weight: 800;
+}
+
+.label-cell {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.field-value {
+  min-height: 22px;
+  white-space: pre-wrap;
+}
+
+.large-box {
+  height: 190px;
+}
+
+.medium-box {
+  height: 125px;
+}
+
+.team-box {
+  height: 300px;
+}
+
+.assets-box {
+  height: 260px;
+}
+
+.planned-box {
+  height: 135px;
+}
+
+.additional-box {
+  height: 55px;
+}
+
+.footer-cell {
+  height: 34px;
+}
+
+/* Print / Export */
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .form-panel,
+  .header,
+  .actions,
+  .no-print {
+    display: none !important;
+  }
+
+  .app {
+    max-width: none;
+    padding: 0;
+  }
+
+  .generator-layout {
+    display: block;
+  }
+
+  .preview-panel {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .sitrep-page {
+    border: none;
+    margin: 0;
+    page-break-after: always;
+  }
+
+  .sitrep-page:last-child {
+    page-break-after: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .generator-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sitrep-page {
+    width: 100%;
+    min-height: auto;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 14px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .sitrep-title {
+    font-size: 20px;
+  }
+}
