@@ -36,7 +36,6 @@ function saveDraft() {
 
 function loadDraft() {
   const saved = localStorage.getItem("capSitrepDraft");
-
   if (!saved) return;
 
   try {
@@ -44,7 +43,6 @@ function loadDraft() {
 
     fields.forEach((field) => {
       const element = document.getElementById(field);
-
       if (element && data[field]) {
         element.value = data[field];
       }
@@ -63,6 +61,23 @@ function clearForm() {
   });
 
   localStorage.removeItem("capSitrepDraft");
+}
+
+function formatDocxError(error) {
+  if (error.properties && error.properties.errors) {
+    return error.properties.errors
+      .map((err) => {
+        return (
+          err.properties?.explanation ||
+          err.properties?.id ||
+          err.message ||
+          "Unknown template error"
+        );
+      })
+      .join("\n\n");
+  }
+
+  return error.message || "Unknown export error";
 }
 
 async function exportSitrep() {
@@ -90,36 +105,29 @@ async function exportSitrep() {
     }
 
     const arrayBuffer = await response.arrayBuffer();
-
     const zip = new PizZip(arrayBuffer);
 
     const doc = new window.docxtemplater(zip, {
       paragraphLoop: true,
-      linebreaks: true,
+      linebreaks: true
     });
 
     doc.render({
       incidentName: getValue("incidentName"),
       missionNumber: getValue("missionNumber"),
-
       dateFrom: getValue("dateFrom"),
       dateTo: getValue("dateTo"),
-
       timeFrom: getValue("timeFrom"),
       timeTo: getValue("timeTo"),
-
       currentSituation: getValue("currentSituation"),
       criticalIssues: getValue("criticalIssues"),
       equipmentStatus: getValue("equipmentStatus"),
       teamStatus: getValue("teamStatus"),
-
       assetsAvailable: getValue("assetsAvailable"),
       plannedActivities: getValue("plannedActivities"),
       additionalInfo: getValue("additionalInfo"),
-
       preparedBy: getValue("preparedBy"),
       distribution: getValue("distribution"),
-
       reportDate: getValue("reportDate"),
       reportTime: getValue("reportTime")
     });
@@ -127,14 +135,14 @@ async function exportSitrep() {
     const blob = doc.getZip().generate({
       type: "blob",
       mimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     });
 
     saveAs(blob, "CAP-SITREP.docx");
   } catch (error) {
     console.error("SITREP Export Error:", error);
 
-    alert("Export failed:\n\n" + error.message);
+    alert("Export failed:\n\n" + formatDocxError(error));
   }
 }
 
