@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAP Situation Report Generator</title>
 
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- DOCX Export Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.5/pizzip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.11/docxtemplater.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>CAP Situation Report Generator</h1>
+      <p>Create and export Civil Air Patrol SITREPs.</p>
+    </header>
+
+    <div class="card">
+
+      <div class="grid">
+
+        <div class="form-group">
+          <label>Incident Name</label>
+          <input type="text" id="incidentName">
+        </div>
+
+        <div class="form-group">
+          <label>Mission Number</label>
+          <input type="text" id="missionNumber">
+        </div>
+
+        <div class="form-group">
+          <label>Date From</label>
+          <input type="date" id="dateFrom">
+        </div>
+
+        <div class="form-group">
+          <label>Date To</label>
+          <input type="date" id="dateTo">
+        </div>
+
+        <div class="form-group">
+          <label>Time From</label>
+          <input type="time" id="timeFrom">
+        </div>
+
+        <div class="form-group">
+          <label>Time To</label>
+          <input type="time" id="timeTo">
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label>Current Situation</label>
+        <textarea id="currentSituation"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Critical Issues</label>
+        <textarea id="criticalIssues"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Equipment Status</label>
+        <textarea id="equipmentStatus"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Team Status</label>
+        <textarea id="teamStatus"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Assets Available</label>
+        <textarea id="assetsAvailable"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Planned Activities (24–72 Hours)</label>
+        <textarea id="plannedActivities"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Additional Information</label>
+        <textarea id="additionalInfo"></textarea>
+      </div>
+
+      <div class="grid">
+
+        <div class="form-group">
+          <label>Prepared By</label>
+          <input type="text" id="preparedBy">
+        </div>
+
+        <div class="form-group">
+          <label>Distribution</label>
+          <input type="text" id="distribution">
+        </div>
+
+        <div class="form-group">
+          <label>Report Date</label>
+          <input type="date" id="reportDate">
+        </div>
+
+        <div class="form-group">
+          <label>Report Time</label>
+          <input type="time" id="reportTime">
+        </div>
+
+      </div>
+
+      <div class="button-row">
+        <button id="exportBtn" class="primary">
+          Export SITREP
+        </button>
+
+        <button id="saveBtn" class="secondary">
+          Save Draft
+        </button>
+
+        <button id="clearBtn" class="danger">
+          Clear Form
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
