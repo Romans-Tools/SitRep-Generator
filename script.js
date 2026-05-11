@@ -70,18 +70,46 @@ async function exportSitrep() {
 
   try {
 
-    const response = await fetch("SITREP.docx");
+    // Verify libraries loaded
+
+    if (typeof PizZip === "undefined") {
+      throw new Error("PizZip library failed to load.");
+    }
+
+    if (typeof window.docxtemplater === "undefined") {
+      throw new Error("Docxtemplater library failed to load.");
+    }
+
+    if (typeof saveAs === "undefined") {
+      throw new Error("FileSaver library failed to load.");
+    }
+
+    // Load template
+
+    const response = await fetch("./SITREP.docx");
+
+    if (!response.ok) {
+      throw new Error(
+        `Unable to load SITREP.docx (HTTP ${response.status})`
+      );
+    }
 
     const arrayBuffer = await response.arrayBuffer();
 
+    // Open DOCX zip
+
     const zip = new PizZip(arrayBuffer);
+
+    // Create template document
 
     const doc = new window.docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
     });
 
-    doc.setData({
+    // Replace placeholders
+
+    doc.render({
 
       incidentName: getValue("incidentName"),
       missionNumber: getValue("missionNumber"),
@@ -93,8 +121,11 @@ async function exportSitrep() {
       timeTo: getValue("timeTo"),
 
       currentSituation: getValue("currentSituation"),
+
       criticalIssues: getValue("criticalIssues"),
+
       equipmentStatus: getValue("equipmentStatus"),
+
       teamStatus: getValue("teamStatus"),
 
       assetsAvailable: getValue("assetsAvailable"),
@@ -104,14 +135,16 @@ async function exportSitrep() {
       additionalInfo: getValue("additionalInfo"),
 
       preparedBy: getValue("preparedBy"),
+
       distribution: getValue("distribution"),
 
       reportDate: getValue("reportDate"),
+
       reportTime: getValue("reportTime")
 
     });
 
-    doc.render();
+    // Generate output file
 
     const blob = doc.getZip().generate({
       type: "blob",
@@ -119,14 +152,16 @@ async function exportSitrep() {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
 
+    // Download file
+
     saveAs(blob, "CAP-SITREP.docx");
 
   } catch (error) {
 
-    console.error(error);
+    console.error("SITREP Export Error:", error);
 
     alert(
-      "Error exporting SITREP. Make sure SITREP.docx exists and contains placeholders."
+      "Export failed:\n\n" + error.message
     );
   }
 }
