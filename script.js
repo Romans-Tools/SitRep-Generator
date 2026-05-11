@@ -1,5 +1,3 @@
-// script.js - CAP Situation Report Generator
-
 const fields = [
   "incidentName",
   "missionNumber",
@@ -21,91 +19,132 @@ const fields = [
 ];
 
 function getValue(id) {
-  const el = document.getElementById(id);
-  return el ? el.value.trim() : "";
-}
-
-function setText(id, value) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value || "";
-}
-
-function updatePreview() {
-  fields.forEach((field) => {
-    setText(`preview-${field}`, getValue(field));
-  });
-}
-
-function clearForm() {
-  fields.forEach((field) => {
-    const el = document.getElementById(field);
-    if (el) el.value = "";
-  });
-
-  updatePreview();
-}
-
-function validateRequiredFields() {
-  const required = ["incidentName", "missionNumber", "dateFrom", "dateTo", "preparedBy"];
-  const missing = required.filter((field) => !getValue(field));
-
-  if (missing.length > 0) {
-    alert("Please complete the required fields before exporting.");
-    return false;
-  }
-
-  return true;
-}
-
-function exportSitrep() {
-  if (!validateRequiredFields()) return;
-
-  updatePreview();
-  window.print();
+  return document.getElementById(id).value.trim();
 }
 
 function saveDraft() {
+
   const data = {};
 
-  fields.forEach((field) => {
+  fields.forEach(field => {
     data[field] = getValue(field);
   });
 
-  localStorage.setItem("capSitrepDraft", JSON.stringify(data));
+  localStorage.setItem(
+    "capSitrepDraft",
+    JSON.stringify(data)
+  );
+
   alert("Draft saved.");
 }
 
 function loadDraft() {
+
   const saved = localStorage.getItem("capSitrepDraft");
+
   if (!saved) return;
 
   const data = JSON.parse(saved);
 
-  fields.forEach((field) => {
-    const el = document.getElementById(field);
-    if (el && data[field]) el.value = data[field];
+  fields.forEach(field => {
+
+    if (data[field]) {
+      document.getElementById(field).value = data[field];
+    }
+
+  });
+}
+
+function clearForm() {
+
+  if (!confirm("Clear all fields?")) return;
+
+  fields.forEach(field => {
+    document.getElementById(field).value = "";
   });
 
-  updatePreview();
+  localStorage.removeItem("capSitrepDraft");
+}
+
+async function exportSitrep() {
+
+  try {
+
+    const response = await fetch("SITREP.docx");
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    const zip = new PizZip(arrayBuffer);
+
+    const doc = new window.docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    doc.setData({
+
+      incidentName: getValue("incidentName"),
+      missionNumber: getValue("missionNumber"),
+
+      dateFrom: getValue("dateFrom"),
+      dateTo: getValue("dateTo"),
+
+      timeFrom: getValue("timeFrom"),
+      timeTo: getValue("timeTo"),
+
+      currentSituation: getValue("currentSituation"),
+      criticalIssues: getValue("criticalIssues"),
+      equipmentStatus: getValue("equipmentStatus"),
+      teamStatus: getValue("teamStatus"),
+
+      assetsAvailable: getValue("assetsAvailable"),
+
+      plannedActivities: getValue("plannedActivities"),
+
+      additionalInfo: getValue("additionalInfo"),
+
+      preparedBy: getValue("preparedBy"),
+      distribution: getValue("distribution"),
+
+      reportDate: getValue("reportDate"),
+      reportTime: getValue("reportTime")
+
+    });
+
+    doc.render();
+
+    const blob = doc.getZip().generate({
+      type: "blob",
+      mimeType:
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+
+    saveAs(blob, "CAP-SITREP.docx");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Error exporting SITREP. Make sure SITREP.docx exists and contains placeholders."
+    );
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  fields.forEach((field) => {
-    const el = document.getElementById(field);
-    if (el) {
-      el.addEventListener("input", updatePreview);
-      el.addEventListener("change", updatePreview);
-    }
-  });
-
-  const exportButton = document.getElementById("exportSitrep");
-  const clearButton = document.getElementById("clearForm");
-  const saveButton = document.getElementById("saveDraft");
-
-  if (exportButton) exportButton.addEventListener("click", exportSitrep);
-  if (clearButton) clearButton.addEventListener("click", clearForm);
-  if (saveButton) saveButton.addEventListener("click", saveDraft);
 
   loadDraft();
-  updatePreview();
+
+  document
+    .getElementById("saveBtn")
+    .addEventListener("click", saveDraft);
+
+  document
+    .getElementById("clearBtn")
+    .addEventListener("click", clearForm);
+
+  document
+    .getElementById("exportBtn")
+    .addEventListener("click", exportSitrep);
+
 });
