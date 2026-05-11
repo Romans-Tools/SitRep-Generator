@@ -91,6 +91,21 @@ function formatDocxError(error) {
   return error.message || "Unknown export error";
 }
 
+function buildExportFileName() {
+  const incidentName = getValue("incidentName");
+
+  if (!incidentName) {
+    return "CAP-SITREP.docx";
+  }
+
+  const safeName = incidentName
+    .replace(/[<>:"/\\|?*\u0000-\u001F]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return `${safeName || "CAP-SITREP"}.docx`;
+}
+
 async function exportSitrep() {
 
   try {
@@ -185,7 +200,7 @@ async function exportSitrep() {
 
     // Download generated file
 
-    saveAs(blob, "CAP-SITREP.docx");
+    saveAs(blob, buildExportFileName());
 
   } catch (error) {
 
