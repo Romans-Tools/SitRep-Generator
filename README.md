@@ -5,10 +5,14 @@ A lightweight browser-based tool for Civil Air Patrol teams to draft and export 
 ## Features
 
 - Guided form for key SITREP data fields.
-- Draft persistence in browser `localStorage`.
+- Required-field validation before export, with inline highlighting.
+- Draft persistence in browser `localStorage`, with automatic background saving as you type.
+- Report date/time pre-filled with the current local date and time.
+- Dates rendered into the document in a readable `DD MMM YYYY` format.
 - One-click export to a populated `.docx` file.
 - Automatic filename generation from incident name.
 - Clear-form workflow that also removes saved draft data.
+- Inline status messages instead of pop-up alerts.
 
 ## Project Files
 
