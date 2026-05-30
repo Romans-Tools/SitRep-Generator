@@ -16,9 +16,6 @@
 </head>
 
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-
   <main class="container">
     <header class="hero">
       <p class="eyebrow">CAP Operations Toolkit</p>
@@ -29,12 +26,12 @@
     <section class="card">
       <div class="section-head">
         <h2>Report Details</h2>
-        <p>All values map directly into <strong>SITREP.docx</strong>.</p>
+        <p>Fields marked <span class="req" aria-hidden="true">*</span> are required. All values map directly into <strong>SITREP.docx</strong>.</p>
       </div>
 
       <div class="grid">
-        <div class="form-group"><label for="incidentName">Incident Name</label><input type="text" id="incidentName" placeholder="e.g., Flood Response Alpha"></div>
-        <div class="form-group"><label for="missionNumber">Mission Number</label><input type="text" id="missionNumber" placeholder="e.g., 26-1234"></div>
+        <div class="form-group"><label for="incidentName">Incident Name <span class="req" aria-hidden="true">*</span></label><input type="text" id="incidentName" placeholder="e.g., Flood Response Alpha" required autocomplete="off"></div>
+        <div class="form-group"><label for="missionNumber">Mission Number <span class="req" aria-hidden="true">*</span></label><input type="text" id="missionNumber" placeholder="e.g., 26-1234" required autocomplete="off"></div>
         <div class="form-group"><label for="dateFrom">Date From</label><input type="date" id="dateFrom"></div>
         <div class="form-group"><label for="dateTo">Date To</label><input type="date" id="dateTo"></div>
         <div class="form-group"><label for="timeFrom">Time From</label><input type="time" id="timeFrom"></div>
@@ -57,10 +54,12 @@
       </div>
 
       <div class="button-row">
-        <button id="exportBtn" class="primary">Export SITREP</button>
-        <button id="saveBtn" class="secondary">Save Draft</button>
-        <button id="clearBtn" class="danger">Clear Form</button>
+        <button id="exportBtn" class="primary" type="button">Export SITREP</button>
+        <button id="saveBtn" class="secondary" type="button">Save Draft</button>
+        <button id="clearBtn" class="danger" type="button">Clear Form</button>
       </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
   </main>
 

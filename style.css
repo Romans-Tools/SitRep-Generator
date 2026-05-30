@@ -205,24 +205,32 @@ button {
   border-bottom: none;
 }
 
-.section-heading {
+.section-heading,
+.section-head {
   display: grid;
   gap: 0.45rem;
   margin-bottom: 1rem;
 }
 
 .section-heading h2,
+.section-head h2,
 .preview-card h2 {
   margin: 0;
   line-height: 1.2;
 }
 
 .section-heading p,
+.section-head p,
 .preview-card__title p,
 .page-footer {
   margin: 0;
   color: var(--text-soft);
   line-height: 1.65;
+}
+
+.req {
+  color: var(--danger);
+  font-weight: 700;
 }
 
 /* Form */
@@ -280,6 +288,12 @@ textarea:focus {
   border-color: var(--brand);
   box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.16);
   background: #fff;
+}
+
+input.input-error,
+textarea.input-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.12);
 }
 
 /* Callouts */
@@ -371,6 +385,53 @@ button:hover,
 .danger:hover {
   background: var(--danger-dark);
   border-color: var(--danger-dark);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+}
+
+/* Status messages */
+
+.status {
+  margin: 1rem 0 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  line-height: 1.5;
+  opacity: 0;
+  transition:
+    opacity var(--transition),
+    max-height var(--transition),
+    padding var(--transition);
+}
+
+.status.is-visible {
+  max-height: 200px;
+  padding: 0.75rem 1rem;
+  opacity: 1;
+}
+
+.status--success {
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  border: 1px solid var(--border-strong);
+}
+
+.status--error {
+  background: #fdecea;
+  color: var(--danger-dark);
+  border: 1px solid #f3b4ae;
+}
+
+.status--info {
+  background: var(--surface-alt);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
 }
 
 /* Preview / guidance column */
